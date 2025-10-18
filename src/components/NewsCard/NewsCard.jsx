@@ -1,5 +1,6 @@
 import React from 'react';
 import { BsBookmark, BsShare, BsStarFill, BsEye } from 'react-icons/bs'; // Import necessary icons
+import { Link } from 'react-router';
 
 // Helper function to format the date (simple YYYY-MM-DD)
 const formatDate = (dateString) => {
@@ -9,6 +10,7 @@ const formatDate = (dateString) => {
 
 const NewsCard = ({ news }) => {
   const {
+    id,
     title,
     rating,
     total_view,
@@ -88,9 +90,9 @@ const NewsCard = ({ news }) => {
           {/* Main Snippet Text */}
           {snippet}
         </p>
-        <a href="#" className="text-red-500 font-bold hover:text-red-700 transition-colors">
+        <Link to={`/news-details/${id}`} className="text-red-500 font-bold hover:text-red-700 transition-colors">
           Read More
-        </a>
+        </Link>
       </div>
 
       {/* Footer Section: Rating and Views */}
