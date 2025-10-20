@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLoaderData, useParams } from 'react-router';
 import NewsCard from '../components/NewsCard/NewsCard';
 
-const CategoryNews = () => {
-    const data = useLoaderData()
+const CategoryNews = ({data: propData, defaultId }) => {
+    const loaderData =  useLoaderData()
+    const data = propData ||loaderData
     // console.log(data)
-    const {id} = useParams()
+    const params = useParams() 
+     const id = defaultId || params.id;
     const [categoryNews,setCategoryNews] = useState([])
 
     useEffect(()=>{
@@ -16,7 +18,7 @@ const CategoryNews = () => {
             setCategoryNews(filterData)
         }else{
              const filterData = data.filter(news=>news.category_id == id)
-        console.log(filterData)
+        // console.log(filterData)
         setCategoryNews(filterData)
         }
        

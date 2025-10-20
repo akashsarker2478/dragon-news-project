@@ -1,9 +1,12 @@
 import React from 'react';
+import { useLoaderData } from 'react-router';
+import CategoryNews from './CategoryNews';
 
 const Home = () => {
+    const data = useLoaderData()
     return (
         <div>
-            This is home
+            <CategoryNews data = {data} defaultId="0"></CategoryNews>
         </div>
     );
 };

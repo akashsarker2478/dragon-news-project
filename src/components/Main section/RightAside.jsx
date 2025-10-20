@@ -6,7 +6,7 @@ import Qzone from '../Q-zone/qzone';
 const RightAside = () => {
     return (
         <div className='space-y-4'>
-            <SocialLogin></SocialLogin>
+            {/* <SocialLogin></SocialLogin> */}
             <FindUs></FindUs>
             <Qzone></Qzone>
         </div>

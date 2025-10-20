@@ -17,19 +17,28 @@ const Navbar = () => {
       });
   };
   return (
-    <div className="flex justify-between items-center mt-4">
-      <div></div>
-      <nav className="flex gap-3 text-accent">
+    <div className=" flex flex-col gap-5 justify-center md:flex md:flex-row   md:justify-between items-center mt-4 underline">
+      <div className="font font-semibold text-xl text-secondary">
+        {user && (
+    <>
+      <span className="font-bold text-black"><i>Welcome</i></span> {user.displayName}
+    </>
+  )}
+
+        
+
+      </div>
+      <nav className=" md:flex gap-3 text-accent">
         <NavLink to={"/"}>Home</NavLink>
         <NavLink to={"/about"}>About</NavLink>
         <NavLink to={"/career"}>Career</NavLink>
       </nav>
       <div className="flex gap-1">
-        <img src={loginImg} alt="" />
+        <img className="w-12 rounded-full" src={user? user.photoURL : loginImg} alt="" />
         {user ? (
-          <button onClick={handleLogout} className="btn btn-primary px-10">
+          <Link onClick={handleLogout} to={"/auth/login"} className="btn btn-primary px-10">
             Logout
-          </button>
+          </Link>
         ) : (
           <Link to={"/auth/login"} className="btn btn-primary px-10">
             Login
