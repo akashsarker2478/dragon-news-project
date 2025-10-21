@@ -2,6 +2,7 @@ import React, { use, useState } from "react";
 import { GiEvilTower } from "react-icons/gi";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Context & Provider/AuthContext";
+import { sendEmailVerification } from "firebase/auth";
 
 const Register = () => {
   const { createUser, setUser, updateUser } = use(AuthContext);
@@ -15,7 +16,6 @@ const Register = () => {
     const name = event.target.name.value;
     if (name.length < 5) {
       SetNameError("Name should be at lest five character");
-      return;
     } else {
       SetNameError("");
     }
@@ -49,8 +49,15 @@ const Register = () => {
         updateUser({ displayName: name, photoURL: photo })
           .then(() => {
             setUser({ ...user, displayName: name, photoURL: photo });
+            sendEmailVerification(user) .then(()=>{
+              alert('A verification email has been sent. Please check your inbox.')
+              
+            })
+            .catch((error) => {
+            console.error("Error sending email verification:", error);
+          });
             alert("successfully register!");
-            navigate('/')
+            
           })
           .catch((error) => {
             console.log(error);

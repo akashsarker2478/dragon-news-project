@@ -1,10 +1,15 @@
-import React, { use, useState } from 'react';
+import React, { use, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../../Context & Provider/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../firebase/Firebase.config';
 
 const Login = () => {
+  const [eye,setEye] = useState(false)
   const [error,setError] = useState('')
+  const emailRef = useRef()
     const {loginUser,googleSignIn} = use(AuthContext)
     const location = useLocation()
     // console.log(location)
@@ -16,6 +21,10 @@ const Login = () => {
         // console.log(email,password)
         loginUser(email,password)
         .then(res=>{
+           if(!res.user?.emailVerified){
+                alert('your email is not verified')
+                return;
+              }
             alert('login successfully')
             console.log(res.user)
             navigate(`${location.state? location.state : '/'}`)
@@ -30,12 +39,25 @@ const Login = () => {
             .then((result) => {
         console.log(result.user);
         alert("Google sign-in successful!");
-        navigate("/"); // লগইন হলে হোম পেজে পাঠিয়ে দিচ্ছি
+        navigate("/"); 
       })
       .catch((error) => {
         console.log(error.message);
         alert(error.message);
       });
+    }
+    const handleForgotPassword = ()=>{
+      
+      const email = emailRef.current.value
+      console.log('forgot password',email)
+      sendPasswordResetEmail(auth,email)
+      .then(()=>{
+        alert('check your email')
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+      
     }
     return (
          
@@ -45,11 +67,18 @@ const Login = () => {
       <div className="card-body">
         <form onSubmit={handleLogIn}>
             <fieldset className="fieldset">
+              {/* email */}
           <label className="label">Email</label>
-          <input type="email" name='email' className="input" placeholder="Email" required />
-          <label className="label">Password</label>
-          <input type="password" name='password' className="input" placeholder="Password"  required/>
-          <div><a className="link link-hover">Forgot password?</a></div>
+          <input type="email" ref={emailRef} name='email' className="input" placeholder="Email" required />
+          {/* password */}
+         <div className='relative'>
+           <label className="label">Password</label>
+          <input type={eye? "text":"password" }name='password' className="input" placeholder="Password"  required/>
+          <span onClick={()=>setEye(!eye)} className='absolute top-[30px] right-6 cursor-pointer'>
+            {eye?<FaEye /> : <FaEyeSlash/>}
+          </span>
+         </div>
+          <div onClick={handleForgotPassword}><a className="link link-hover cursor-pointer">Forgot password?</a></div>
           {error&& <p className='text-red-500 text-sm'>{error}</p>}
           <button className="btn btn-neutral mt-4">Login</button>
           <p className='text-center text-xl font-semibold'>or</p>
